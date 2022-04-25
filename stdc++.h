@@ -115,4 +115,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <omp.h>
+#include <pthread.h>
+#include <unistd.h>
 #endif

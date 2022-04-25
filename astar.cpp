@@ -2,8 +2,8 @@
 #include "stdc++.h"
 using namespace std;
 
-#define ROW 9
-#define COL 10
+#define ROW 100
+#define COL 100
 
 // Creating a shortcut for int, int pair type
 typedef pair<int, int> Pair;
