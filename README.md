@@ -6,7 +6,7 @@
 ```
 
 ## if you want to change the size of map
-change the number of ROW and COL<br>
+change the number of ROW and COL in astar_waypoints.cpp<br>
 you can choose below<br>
 8x8<br>
 10x10<br>
