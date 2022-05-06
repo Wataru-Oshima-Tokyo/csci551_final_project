@@ -2,10 +2,10 @@
 #include "stdc++.h"
 using namespace std;
 
-#define ROW 401
-#define COL 400
-#define WAYPOINTS
-#define PARALELL
+#define ROW 200
+#define COL 200
+#define WAYPOINTS // if you uncomment this, the programm only finds the start and goal points
+#define PARALLEL // if you uncomment this, the programm runs seaquentially
 
 
 // Creating a shortcut for int, int pair type
@@ -48,8 +48,6 @@ void *checkPath(void *arguments){
 	// *((struct arg_struct*)arguments);
 	path_struct _path = *((struct path_struct*)arguments);
 	int idx =_path.index+1;
-	// Pair src = make_pair(0, 0);
-	// Pair dest = make_pair(85,44);
 	Pair src = _path.src;
 	Pair dest =_path.dest;
 	aStarSearch(_grid, src, dest, idx);
@@ -705,68 +703,89 @@ int main()
 
 	clock_gettime(CLOCK_MONOTONIC, &start); fstart=(double)start.tv_sec + ((double)start.tv_nsec/1000000000.0);
 
+	int waypoints[6][2];
 	
 	
 	//{row, col}
-	// //for 100x100-----
-	// int waypoints[6][2] = 
-	// {{0,0},
-	// {16,13},
-	// {48,8},
-	// {82,17},
-	// {92,58},
-	// {ROW-1,COL-1}
-	// };
-	// //-------------------
+	if(ROW==100){
+		// //for 100x100-----
+		int _waypoints[6][2] = 
+		{{0,0},
+		{16,13},
+		{48,8},
+		{82,17},
+		{92,58},
+		{ROW-1,COL-1}
+		};
+		// //-------------------
+		memcpy(&waypoints, _waypoints, sizeof(_waypoints));
+	}
+	else if(ROW==200){
+		// for 200x200
+		int _waypoints[6][2] = 
+			{ {0,0},
+			{64,89},
+			{114,130},
+			{136,143},
+			{158,159},
+			{ROW-1,COL-1}
+		};
+		memcpy(&waypoints, _waypoints, sizeof(_waypoints));
+	}
+	else if(ROW==300){
+		// for 300x300
+		int _waypoints[6][2] = 
+		{{0,0},
+		  {42,36},
+		  {111,107},
+		  {171,192},
+		  {233,247},
+		 {ROW-1,COL-1}
+		};
+		memcpy(&waypoints, _waypoints, sizeof(_waypoints));
+	}else if(ROW==501){
+		// for 501x400
+		int _waypoints[6][2] = 
+		{ {0,0},
+		  {85,44},
+		  {191,121},
+		  {363,246},
+		  {403,296},
+		  {ROW-1,COL-1}
+		};
+		memcpy(&waypoints, _waypoints,sizeof(_waypoints));
+	}else if(ROW==1000){
+		//for 1000x1000
+		int _waypoints[6][2] =
+		{
+		 {0,0},
+		//  {195,191},
+		 {352,304},
+		 {448,437},
+		//  {505,492},
+		 {615,588},
+		//  {719,702},
+		 {824,810},
+		//  {951,950},
+		 {ROW-1,COL-1}
+		};
+		memcpy(&waypoints, _waypoints, sizeof(_waypoints));
+	}
 
-	// // for 200x200
-	// int waypoints[6][2] = 
-	// {{0,0},
-	//   {64,89},
-	//   {114,130},
-	//   {136,143},
-	//   {158,159},
-	//  {ROW-1,COL-1}
-	// };
 
 
-	// for 200x200
-	int waypoints[2][2] = 
-	{{0,0},
-	//   {42,36},
-	//   {111,107},
-	//   {171,192},
-	//   {233,247},
-	 {ROW-1,COL-1}
-	};
-	// for 501x400
-	// int waypoints[6][2] = 
-	// { {0,0},
-	//   {85,44},
-	//   {191,121},
-	//   {363,246},
-	//   {403,296},
-	//   {ROW-1,COL-1}
-	// };
 
 
-	// //for 1000x1000
-	// int waypoints[10][2] =
-	// {
-	//  {0,0},
-	//  {195,191},
-	//  {352,304},
-	//  {448,437},
-	//  {505,492},
-	//  {615,588},
-	//  {719,702},
-	//  {824,810},
-	//  {951,950},
-	//  {ROW-1,COL-1}
-	// };
+
+
+
+
+
+
+
 	int size = sizeof(waypoints)/sizeof(waypoints[0]);
 	
-	#ifdef PARALELL
+	#if defined(PARALLEL) && defined(WAYPOINTS)
 		pthread_t threads[size-1];  
 		path_struct args[size-1];
 		int i,rc;
