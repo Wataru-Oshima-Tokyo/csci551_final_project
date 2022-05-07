@@ -30,7 +30,7 @@ int waypoints[6][2];
 int r = ROW;
 int c = COL;
 const string map_name = "./maps/map" + to_string(r) + "x" +to_string(c) + ".txt";
----------------------------------------------
+//---------------------------------------------
 	
 //prototypes------------------------------------------------------------------------------
 bool isValid(int row, int col);
