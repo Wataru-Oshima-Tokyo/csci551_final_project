@@ -22,8 +22,16 @@ struct cell {
 	// f = g + h
 	double f, g, h;
 };
-
+//variables-----------------------------------
 int _grid[ROW][COL];
+struct timespec start, stop;
+double fstart, fstop;
+int waypoints[6][2];
+int r = ROW;
+int c = COL;
+const string map_name = "./maps/map" + to_string(r) + "x" +to_string(c) + ".txt";
+---------------------------------------------
+	
 //prototypes------------------------------------------------------------------------------
 bool isValid(int row, int col);
 bool isUnBlocked(int grid[][COL], int row, int col);
@@ -36,7 +44,7 @@ void *checkPath(void *arguments);
 //---------------------------------------------------------------------------------------
 
 
-//for paralell
+//for paralell-----------------
 struct path_struct {
 	int index;
 	Pair dest;
@@ -53,7 +61,7 @@ void *checkPath(void *arguments){
 	aStarSearch(_grid, src, dest, idx);
 }
 
-
+//------------------------------
 
 
 
@@ -660,8 +668,7 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest, int index)
 // Driver program to test above function
 int main()
 {
-	struct timespec start, stop;
-	double fstart, fstop;
+
 	/* Description of the Grid-
 	1--> The cell is not blocked
 	0--> The cell is blocked */
@@ -676,9 +683,8 @@ int main()
 	// 		{ 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
 	// 		{ 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 } };
 	
-	int r = ROW;
-	int c = COL;
-	string map_name = "./maps/map" + to_string(r) + "x" +to_string(c) + ".txt";
+
+	
 	ifstream ifile;
 	ifile.open(map_name);
 	int tempint=0;
@@ -703,7 +709,7 @@ int main()
 
 	clock_gettime(CLOCK_MONOTONIC, &start); fstart=(double)start.tv_sec + ((double)start.tv_nsec/1000000000.0);
 
-	int waypoints[6][2];
+	
 	
 	
 	//{row, col}
