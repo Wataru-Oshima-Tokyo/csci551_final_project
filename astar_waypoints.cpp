@@ -2,8 +2,8 @@
 #include "stdc++.h"
 using namespace std;
 
-#define ROW 200
-#define COL 200
+#define ROW 300
+#define COL 300
 #define WAYPOINTS // if you uncomment this, the programm only finds the start and goal points
 #define PARALLEL // if you uncomment this, the programm runs seaquentially
 
