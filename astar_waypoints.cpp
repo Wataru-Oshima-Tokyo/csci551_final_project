@@ -39,7 +39,7 @@ bool isDestination(int row, int col, Pair dest);
 double calculateHValue(int row, int col, Pair dest);
 void tracePath(cell cellDetails[][COL], Pair dest, int index);
 void printFoundsMsg(int index);
-void aStarSearch(int grid[][COL], Pair src, Pair dest, int index);
+void aStarSearch(int grid[][COL], Pair src, Pair dest, int index, bool closedList[][COL], cell cellDetails[][COL]);
 void *checkPath(void *arguments);
 //---------------------------------------------------------------------------------------
 
@@ -50,6 +50,10 @@ struct path_struct {
 	Pair dest;
 	Pair src;
 	int grid[ROW][COL];
+	bool closedList[ROW][COL];
+	// Declare a 2D array of structure to hold the details
+	// of that cell
+	cell cellDetails[ROW][COL];
 };
 
 void *checkPath(void *arguments){
@@ -58,7 +62,7 @@ void *checkPath(void *arguments){
 	int idx =_path.index+1;
 	Pair src = _path.src;
 	Pair dest =_path.dest;
-	aStarSearch(_grid, src, dest, idx);
+	aStarSearch(_grid, src, dest, idx, _path.closedList,_path.cellDetails);
 }
 
 //------------------------------
@@ -174,12 +178,10 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest, int index)
 	// Create a closed list and initialise it to false which
 	// means that no cell has been included yet This closed
 	// list is implemented as a boolean 2D array
-	bool closedList[ROW][COL];
+	
 	memset(closedList, false, sizeof(closedList));
 
-	// Declare a 2D array of structure to hold the details
-	// of that cell
-	cell cellDetails[ROW][COL];
+
 
 	int i, j;
 
