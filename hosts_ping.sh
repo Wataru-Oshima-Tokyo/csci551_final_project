@@ -1,0 +1,9 @@
+ping -c 10 -w 3 o251-01
+ping -c 10 -w 3 o251-02
+ping -c 10 -w 3 o251-03
+ping -c 10 -w 3 o251-04
+ping -c 10 -w 3 o251-05
+ping -c 10 -w 3 o251-06
+ping -c 10 -w 3 o251-07
+ping -c 10 -w 3 o251-08
+ping -c 10 -w 3 o251-09

@@ -2,8 +2,8 @@
 #include "stdc++.h"
 using namespace std;
 
-#define ROW 300
-#define COL 300
+#define ROW 1000
+#define COL 1000
 #define WAYPOINTS // if you uncomment this, the programm only finds the start and goal points
 #define PARALLEL // if you uncomment this, the programm runs seaquentially
 
@@ -27,9 +27,13 @@ int _grid[ROW][COL];
 struct timespec start, stop;
 double fstart, fstop;
 int waypoints[6][2];
+const int waypoints_size = sizeof(waypoints)/sizeof(waypoints[0]);
 int r = ROW;
 int c = COL;
 const string map_name = "./maps/map" + to_string(r) + "x" +to_string(c) + ".txt";
+bool closedList[waypoints_size][ROW][COL];
+cell cellDetails[waypoints_size][ROW][COL];
+vector<stack<Pair> > gloablPath[waypoints_size];
 //---------------------------------------------
 	
 //prototypes------------------------------------------------------------------------------
@@ -49,11 +53,10 @@ struct path_struct {
 	int index;
 	Pair dest;
 	Pair src;
-	int grid[ROW][COL];
-	bool closedList[ROW][COL];
+	// bool closedList[ROW][COL];
 	// Declare a 2D array of structure to hold the details
 	// of that cell
-	cell cellDetails[ROW][COL];
+	// cell cellDetails[ROW][COL];
 };
 
 void *checkPath(void *arguments){
@@ -62,7 +65,9 @@ void *checkPath(void *arguments){
 	int idx =_path.index+1;
 	Pair src = _path.src;
 	Pair dest =_path.dest;
-	aStarSearch(_grid, src, dest, idx, _path.closedList,_path.cellDetails);
+
+	aStarSearch(_grid, src, dest, idx, closedList[idx],cellDetails[idx]);
+	return 0;
 }
 
 //------------------------------
@@ -115,7 +120,7 @@ double calculateHValue(int row, int col, Pair dest)
 // to destination
 void tracePath(cell cellDetails[][COL], Pair dest, int index)
 {
-	printf("\nThe %d th path is ", index);
+	
 	int row = dest.first;
 	int col = dest.second;
 
@@ -131,14 +136,16 @@ void tracePath(cell cellDetails[][COL], Pair dest, int index)
 	}
 
 	Path.push(make_pair(row, col));
-	while (!Path.empty()) {
-		pair<int, int> p = Path.top();
-		Path.pop();
-		printf("-> {%d,%d} ", p.first, p.second);
-	}
+	gloablPath[index].push_back(Path);
+	// while (!Path.empty()) {
+	// 	pair<int, int> p = Path.top();
+	// 	Path.pop();
+	// 	printf("-> {%d,%d} ", p.first, p.second);
+	// }
 
 	return;
 }
+
 void printFoundsMsg(int index){
 	string foundmsg = "\nThe " + to_string(index) + " th path is found.";
 	cout << foundmsg;
@@ -146,7 +153,7 @@ void printFoundsMsg(int index){
 // A Function to find the shortest path between
 // a given source cell to a destination cell according
 // to A* Search Algorithm
-void aStarSearch(int grid[][COL], Pair src, Pair dest, int index)
+void aStarSearch(int grid[][COL], Pair src, Pair dest, int index, bool closedList[][COL], cell cellDetails[][COL])
 {
 	// If the source is out of range
 	if (isValid(src.first, src.second) == false) {
@@ -178,8 +185,8 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest, int index)
 	// Create a closed list and initialise it to false which
 	// means that no cell has been included yet This closed
 	// list is implemented as a boolean 2D array
-	
-	memset(closedList, false, sizeof(closedList));
+
+	// memset(closedList, false, sizeof(closedList));
 
 
 
@@ -805,7 +812,7 @@ int main()
 			args[i].dest = make_pair(waypoints[i+1][0], waypoints[i+1][1]);
 			// memcpy(&args[i].grid, _grid, ROW*COL*sizeof(int));
 			rc = pthread_create(&threads[i], NULL, checkPath, (void *)&args[i]);
-			puts("\npthread finished\n");
+			// puts("\npthread finished\n");
 			if(rc){
 				std::cout << "Error: unable to create thread, " << rc <<std::endl;
 				exit(-1);
@@ -819,22 +826,37 @@ int main()
 		for(int i=0; i<size-1;i++){
 			Pair src = make_pair(waypoints[i][0], waypoints[i][1]);
 			Pair dest = make_pair(waypoints[i+1][0], waypoints[i+1][1]);
-			aStarSearch(_grid, src, dest,i+1);
+			aStarSearch(_grid, src, dest,i+1, closedList[i],cellDetails[i]);
 		}
 		#else
 			Pair src = make_pair(waypoints[0][0], waypoints[0][1]);
 			Pair dest = make_pair(waypoints[size-1][0], waypoints[size-1][1]);
-			aStarSearch(_grid, src, dest,0);
+			aStarSearch(_grid, src, dest,0,closedList[0],cellDetails[0]);
 		#endif
 	#endif
 
-
-	
-
-
-
-
 	clock_gettime(CLOCK_MONOTONIC, &stop); fstop=(double)stop.tv_sec + ((double)stop.tv_nsec/1000000000.0);
+	int total_steps=0;
+	for(int i=1; i<waypoints_size;i++){
+		printf("\nThe %d th path is ", i);
+			int count=0;
+			while (!gloablPath[i][0].empty()) {
+				pair<int, int> p = gloablPath[i][0].top();
+				gloablPath[i][0].pop();
+				if (count==0)
+					printf("{%d,%d} ", p.first, p.second);
+				else
+					printf("-> {%d,%d} ", p.first, p.second);
+				count++;
+			}
+		printf("\n\n Local steps are %d\n\n", count);
+		total_steps+=count;
+	}
+	printf("\n\n Total steps are %d", total_steps);
+	
+	
+	
+	
 	printf("\nThe toatal time is %f\n", (fstop-fstart));
 
 	return (0);
