@@ -9,10 +9,10 @@ CC =gcc
 
 CFLAGS= -O3 $(INCLUDE_DIRS) $(CDEFS)
 # all: astar astar_revised astar_revised_waypoints astar2 astar2_revised simple_pthread set_affinity_example astar_waypoints temp
-all: astar_waypoints_pthread astar_waypoints_mpi  
+all: astar_waypoints_pthread astar_waypoints_mpi astar_revised
 
 clean:
-	rm -r astar astar_revised astar2 astar2_revised simple_pthread set_affinity_example astar_revised_waypoints astar_waypoints temp
+	rm -r astar astar_revised astar2 astar2_revised simple_pthread set_affinity_example astar_revised_waypoints astar_waypoints temp astar_waypoints_pthread astar_waypoints_mpi
 
 astar: astar.cpp
 	$(CXX)$(LDFLAGS)  -o $@ $@.cpp -Wall
@@ -27,7 +27,7 @@ simple_pthread: simple_pthread.cpp
 	$(CXX) $(LDFLAGS)  -o $@ $@.cpp -Wall -lpthread
 
 astar_revised: astar_revised.cpp
-	$(CXX) $(LDFLAGS)  -o $@ $@.cpp -Wall -fopenmp -lpthread
+	$(CXX) $(LDFLAGS)  -o $@ $@.cpp -Wall -pthread
 
 astar_revised_waypoints: astar_revised_waypoints.cpp
 	$(CXX) $(LDFLAGS)  -o $@ $@.cpp -Wall -lpthread
@@ -36,7 +36,7 @@ set_affinity_example: set_affinity_example.cpp
 	$(CXX) $(LDFLAGS)  -o $@ $@.cpp -Wall -lpthread
 
 astar_waypoints_pthread: astar_waypoints_pthread.cpp
-	$(CXX) $(LDFLAGS)  -o $@ $@.cpp -Wall -lpthread
+	$(CXX) $(LDFLAGS)  -o $@ $@.cpp -Wall -pthread
 
 astar_waypoints_mpi: astar_waypoints_mpi.cpp
 	$(MPICXX) $(LDFLAGS)  -o $@ $@.cpp -Wall -lpthread

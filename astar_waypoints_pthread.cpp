@@ -2,10 +2,10 @@
 #include "stdc++.h"
 using namespace std;
 
-#define ROW 1000
-#define COL 1000
+#define ROW 2000
+#define COL 2000
 #define WAYPOINTS // if you uncomment this, the programm only finds the start and goal points
-#define PARALLEL // if you uncomment this, the programm runs seaquentially
+// #define PARALLEL // if you uncomment this, the programm runs seaquentially
 
 
 // Creating a shortcut for int, int pair type
@@ -785,8 +785,24 @@ int main()
 		 {ROW-1,COL-1}
 		};
 		memcpy(&waypoints, _waypoints, sizeof(_waypoints));
+	}else if(ROW==2000){
+		//for 1000x1000
+		int _waypoints[6][2] =
+		{
+		 {0,0},
+		//  {195,191},
+		//  {352,304},
+		 {448,437},
+		//  {505,492},
+		 {615,687},
+		//  {719,702},
+		 {824,810},
+		//  {951,950},
+		 {1212,1400},
+		 {ROW-1,COL-1}
+		};
+		memcpy(&waypoints, _waypoints, sizeof(_waypoints));
 	}
-
 
 
 
